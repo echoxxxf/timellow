@@ -181,3 +181,13 @@ chrome.alarms.onAlarm.addListener(alarm => {
     scheduleNextHourlyChime();
   }
 });
+
+// 全てのサウンドを停止
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'stopAllSounds') {
+    // BGM・環境音・ポモドーロ・時報すべて停止
+    stopAudio('bgm');
+    stopAudio('ambient');
+    stopPomodoro(); // すでに関数がある前提
+  }
+});

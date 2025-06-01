@@ -15,6 +15,13 @@ document.querySelectorAll('[data-i18n]').forEach(el => {
   }
 });
 
+// 全てのサウンドを停止
+const stopAllButton = document.getElementById('stopAll');
+stopAllButton.addEventListener('click', () => {
+  chrome.runtime.sendMessage({ action: 'stopAllSounds' });
+  chrome.runtime.sendMessage({ action: 'stopPomodoro' });
+  pomodoroStatus.textContent = '停止中';
+});
 
 document.addEventListener('DOMContentLoaded', async () => {
   const toggleChime = document.getElementById('toggleChime');

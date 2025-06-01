@@ -11,10 +11,7 @@
   "ambient_title": { "message": "環境音" },
   "ambient_birds": { "message": "鳥" },
   "ambient_fire": { "message": "焚き火" },
-  "focus_mode_status": {
-    "message": "集中：$1"
-  },
-  "break_mode_status": {
-    "message": "休憩：$1"
-  }
+  "focus_mode_status": { "message": "集中：$1" },
+  "break_mode_status": { "message": "休憩：$1" },
+  "stop_all": { "message": "再生中の音をすべて停止" }
 }

@@ -11,10 +11,7 @@
   "ambient_title": { "message": "Ambient Sound" },
   "ambient_birds": { "message": "Birds" },
   "ambient_fire": { "message": "Campfire" },
-  "focus_mode_status": {
-    "message": "Focus: $1"
-  },
-  "break_mode_status": {
-    "message": "Break: $1"
-  }
+  "focus_mode_status": { "message": "Focus: $1" },
+  "break_mode_status": { "message": "Break: $1" },
+  "stop_all": { "message": "Stop All Sounds" }
 }
