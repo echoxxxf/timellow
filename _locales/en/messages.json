@@ -1,0 +1,20 @@
+{
+  "app_title": { "message": "Pomodoro Timer" },
+  "chime_label": { "message": "Hourly Chime" },
+  "chime_volume": { "message": "Volume" },
+  "pomodoro_settings": { "message": "Pomodoro Settings" },
+  "focus_time": { "message": "Focus (min):" },
+  "break_time": { "message": "Break (min):" },
+  "start_button": { "message": "Start" },
+  "stop_button": { "message": "Stop" },
+  "bgm_title": { "message": "BGM" },
+  "ambient_title": { "message": "Ambient Sound" },
+  "ambient_birds": { "message": "Birds" },
+  "ambient_fire": { "message": "Campfire" },
+  "focus_mode_status": {
+    "message": "Focus: $1"
+  },
+  "break_mode_status": {
+    "message": "Break: $1"
+  }
+}

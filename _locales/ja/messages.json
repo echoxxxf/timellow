@@ -1,0 +1,20 @@
+{
+  "app_title": { "message": "ポモドーロタイマー" },
+  "chime_label": { "message": "時報" },
+  "chime_volume": { "message": "ボリューム" },
+  "pomodoro_settings": { "message": "ポモドーロ設定" },
+  "focus_time": { "message": "集中(分)：" },
+  "break_time": { "message": "休憩(分)：" },
+  "start_button": { "message": "開始" },
+  "stop_button": { "message": "停止" },
+  "bgm_title": { "message": "BGM" },
+  "ambient_title": { "message": "環境音" },
+  "ambient_birds": { "message": "鳥" },
+  "ambient_fire": { "message": "焚き火" },
+  "focus_mode_status": {
+    "message": "集中：$1"
+  },
+  "break_mode_status": {
+    "message": "休憩：$1"
+  }
+}

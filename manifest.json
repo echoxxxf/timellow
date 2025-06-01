@@ -3,6 +3,7 @@
   "name": "Timellow",
   "description": "A Chrome extension that plays hourly chimes, background and ambient sounds, and includes a Pomodoro timer.",
   "version": "1.0",
+  "default_locale": "ja",
   "permissions": ["storage", "alarms", "offscreen"],
   "background": {
     "service_worker": "background.js"

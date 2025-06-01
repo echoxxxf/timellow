@@ -2,55 +2,58 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>ポモドーロタイマー</title>
+  <title data-i18n="app_title">ポモドーロタイマー</title>
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <h1>時報</h1>
+  <h1 data-i18n="chime_label">時報</h1>
   <label class="switch">
     <input type="checkbox" id="toggleChime" />
     <span class="slider"></span>
-    <span class="label-text"> </span>
+    <span class="label-text"></span>
   </label>
   <div>
-    ボリューム: <input type="range" id="chimeVolume" min="0" max="1" step="0.01" />
+    <span data-i18n="chime_volume">ボリューム</span>:
+    <input type="range" id="chimeVolume" min="0" max="1" step="0.01" />
   </div>
 
   <hr>
 
   <div>
-    <h1>ポモドーロ設定</h1>
+    <h1 data-i18n="pomodoro_settings">ポモドーロ設定</h1>
     <div class="pomodoro-inputs">
-      <label for="focusTime">集中(分)：</label>
+      <label for="focusTime" data-i18n="focus_time">集中(分)：</label>
       <input type="number" id="focusTime" min="1" max="120" value="25" />
-      <label for="breakTime">休憩(分)：</label>
+      <label for="breakTime" data-i18n="break_time">休憩(分)：</label>
       <input type="number" id="breakTime" min="1" max="60" value="5" />
     </div>
-    <button id="startPomodoro">開始</button>
-    <button id="stopPomodoro">停止</button>
+    <button id="startPomodoro" data-i18n="start_button">開始</button>
+    <button id="stopPomodoro" data-i18n="stop_button">停止</button>
     <p id="pomodoroStatus"></p>
   </div>
 
   <hr>
 
   <div>
-    <h1>BGM</h1>
+    <h1 data-i18n="bgm_title">BGM</h1>
     <button data-bgm="focus" class="playBGM">1</button>
     <button data-bgm="break" class="playBGM">2</button>
-    <button id="stopBGM">停止</button>
+    <button id="stopBGM" data-i18n="stop_button">停止</button>
     <br />
-    ボリューム: <input type="range" id="bgmVolume" min="0" max="1" step="0.01" />
+    <span data-i18n="chime_volume">ボリューム</span>:
+    <input type="range" id="bgmVolume" min="0" max="1" step="0.01" />
   </div>
 
   <hr>
 
   <div>
-    <h1>環境音</h1>
-    <button data-ambient="birds" class="playAmbient">鳥</button>
-    <button data-ambient="fire" class="playAmbient">焚き火</button>
-    <button id="stopAmbient">停止</button>
+    <h1 data-i18n="ambient_title">環境音</h1>
+    <button data-ambient="birds" class="playAmbient" data-i18n="ambient_birds">鳥</button>
+    <button data-ambient="fire" class="playAmbient" data-i18n="ambient_fire">焚き火</button>
+    <button id="stopAmbient" data-i18n="stop_button">停止</button>
     <br />
-    ボリューム: <input type="range" id="ambientVolume" min="0" max="1" step="0.01" />
+    <span data-i18n="chime_volume">ボリューム</span>:
+    <input type="range" id="ambientVolume" min="0" max="1" step="0.01" />
   </div>
 
   <script src="popup.js"></script>
