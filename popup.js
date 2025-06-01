@@ -17,63 +17,84 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const chimeVolume = document.getElementById('chimeVolume');
 
-  // 1. 保存されている設定を復元
+  // 設定値を復元
   const data = await chrome.storage.local.get([
     'isHourlyChimeOn',
     'bgmVolume',
     'ambientVolume',
-    'chimeVolume'
+    'chimeVolume',
+    'focusMinutes',
+    'breakMinutes'
   ]);
 
   toggleChime.checked = data.isHourlyChimeOn ?? false;
   bgmVolume.value = data.bgmVolume ?? 0.5;
   ambientVolume.value = data.ambientVolume ?? 0.5;
   chimeVolume.value = data.chimeVolume ?? 0.5;
-
-  // 2. チェックボックスの変更時に保存＆メッセージ送信
+  focusTime.value = data.focusMinutes ?? 25;
+  breakTime.value = data.breakMinutes ?? 5;
+  
+  // 毎時鐘のオンオフ
   toggleChime.addEventListener('change', () => {
     const enabled = toggleChime.checked;
     chrome.storage.local.set({ isHourlyChimeOn: enabled });
     chrome.runtime.sendMessage({ action: 'toggleChime', enabled });
   });
 
-  // 3. ボリュームスライダーの保存＆反映
-  bgmVolume.addEventListener('input', () => {
-    chrome.storage.local.set({ bgmVolume: bgmVolume.value });
-    chrome.runtime.sendMessage({ action: 'setVolume', id: 'bgm', volume: parseFloat(bgmVolume.value) });
-  });
+  // 音量変更処理
+  const handleVolumeChange = (slider, id) => {
+    slider.addEventListener('input', () => {
+      const vol = parseFloat(slider.value);
+      chrome.storage.local.set({ [`${id}Volume`]: vol });
+      chrome.runtime.sendMessage({ action: 'setVolume', id, volume: vol });
+    });
+  };
 
-  ambientVolume.addEventListener('input', () => {
-    chrome.storage.local.set({ ambientVolume: ambientVolume.value });
-    chrome.runtime.sendMessage({ action: 'setVolume', id: 'ambient', volume: parseFloat(ambientVolume.value) });
+  handleVolumeChange(bgmVolume, 'bgm');
+  handleVolumeChange(ambientVolume, 'ambient');
+  handleVolumeChange(chimeVolume, 'chime');
+  
+  // ポモドーロ設定が変更されたら保存
+  focusTime.addEventListener('input', () => {
+    const value = parseInt(focusTime.value, 10);
+    if (!isNaN(value)) {
+      chrome.storage.local.set({ focusMinutes: value });
+    }
   });
-
-  chimeVolume.addEventListener('input', () => {
-    chrome.storage.local.set({ chimeVolume: chimeVolume.value });
-    chrome.runtime.sendMessage({ action: 'setVolume', id: 'chime', volume: parseFloat(chimeVolume.value) });
+  
+  breakTime.addEventListener('input', () => {
+    const value = parseInt(breakTime.value, 10);
+    if (!isNaN(value)) {
+      chrome.storage.local.set({ breakMinutes: value });
+    }
   });
-
-  // 4. ポモドーロ開始時にBGM再生も指示
+  
+  // ポモドーロ開始
   startPomodoro.addEventListener('click', () => {
     const focusMinutes = parseInt(focusTime.value, 10);
     const breakMinutes = parseInt(breakTime.value, 10);
     chrome.runtime.sendMessage({ action: 'startPomodoro', focusMinutes, breakMinutes });
 
-    // BGMも再生指示を送る（集中BGMスタート）
-    chrome.runtime.sendMessage({ action: 'playLoop', id: 'bgm', src: 'sounds/focus.mp3', volume: parseFloat(bgmVolume.value) });
+    chrome.runtime.sendMessage({
+      action: 'playLoop',
+      id: 'bgm',
+      src: 'sounds/focus.mp3',
+      volume: parseFloat(bgmVolume.value)
+    });
   });
 
+  // ポモドーロ停止
   stopPomodoro.addEventListener('click', () => {
     chrome.runtime.sendMessage({ action: 'stopPomodoro' });
     pomodoroStatus.textContent = '停止中';
   });
 
-  // 5. BGM再生停止ボタン
+  // BGM再生停止
   stopBGMButton.addEventListener('click', () => {
     chrome.runtime.sendMessage({ action: 'stop', id: 'bgm' });
   });
 
-  // 6. BGM個別再生ボタン
+  // BGM選択再生
   playBGMButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const type = btn.dataset.bgm;
@@ -86,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-  // 7. 環境音の再生・停止・音量変更
+  // 環境音再生・停止
   playAmbientButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const type = btn.dataset.ambient;
@@ -103,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.sendMessage({ action: 'stop', id: 'ambient' });
   });
 
-  // 8. ポモドーロ状態更新を受け取ってUIに反映
+  // ポモドーロ進行状況の表示
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === 'updatePomodoro') {
       const min = Math.floor(msg.remainingTime / 60);
@@ -112,9 +133,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 9. UI起動時に鐘の音のボリュームをbackground.jsにセット（再生されなくても）
-  chrome.runtime.sendMessage({ action: 'setVolume', id: 'chime', volume: parseFloat(chimeVolume.value) });
+  // バックグラウンドに設定を再送信して状態を同期
+  chrome.runtime.sendMessage({
+    action: 'toggleChime',
+    enabled: toggleChime.checked
+  });
 
-  // 10. 毎時の鐘設定がオンならbackground.jsに通知しておく
-  chrome.runtime.sendMessage({ action: 'toggleChime', enabled: toggleChime.checked });
+  chrome.runtime.sendMessage({
+    action: 'setVolume',
+    id: 'chime',
+    volume: parseFloat(chimeVolume.value)
+  });
+
+  chrome.runtime.sendMessage({
+    action: 'setVolume',
+    id: 'bgm',
+    volume: parseFloat(bgmVolume.value)
+  });
+
+  chrome.runtime.sendMessage({
+    action: 'setVolume',
+    id: 'ambient',
+    volume: parseFloat(ambientVolume.value)
+  });
+
 });
