@@ -1,4 +1,21 @@
 // popup.js
+
+// i18n適用スクリプト
+document.querySelectorAll('[data-i18n]').forEach(el => {
+  const key = el.getAttribute('data-i18n');
+  const message = chrome.i18n.getMessage(key);
+  if (!message) return;
+
+  if (['INPUT', 'TEXTAREA'].includes(el.tagName)) {
+    el.placeholder = message;
+  } else if (el.tagName === 'BUTTON') {
+    el.innerText = message;
+  } else {
+    el.textContent = message;
+  }
+});
+
+
 document.addEventListener('DOMContentLoaded', async () => {
   const toggleChime = document.getElementById('toggleChime');
   const focusTime = document.getElementById('focusTime');
@@ -127,9 +144,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ポモドーロ進行状況の表示
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === 'updatePomodoro') {
-      const min = Math.floor(msg.remainingTime / 60);
-      const sec = msg.remainingTime % 60;
-      pomodoroStatus.textContent = `${msg.currentMode === 'focus' ? '集中' : '休憩'} ${min}分${sec}秒`;
+      const min = Math.floor(msg.remainingTime / 60).toString().padStart(2, '0');
+      const sec = (msg.remainingTime % 60).toString().padStart(2, '0');
+      const timeStr = `${min}m ${sec}s`;
+
+      let message;
+      if (msg.currentMode === 'focus') {
+        message = chrome.i18n.getMessage('focus_mode_status', [timeStr]);
+      } else if (msg.currentMode === 'break') {
+        message = chrome.i18n.getMessage('break_mode_status', [timeStr]);
+      } else {
+        message = '';
+      }
+
+      pomodoroStatus.textContent = message;
     }
   });
 
