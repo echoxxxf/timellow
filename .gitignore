@@ -134,3 +134,23 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# OS関連
+.DS_Store
+Thumbs.db
+
+# 音源ファイル（再配布禁止のものを除外）
+sounds/*.mp3
+sounds/*.ogg
+sounds/*.wav
+
+# ユーザーがアップロードする予定の音源
+user_uploads/
+uploads/
+
+# ログファイルや一時ファイル
+*.log
+*.tmp
+
+# Chrome拡張ビルドで使う一時フォルダ
+*.zip
