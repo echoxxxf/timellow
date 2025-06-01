@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>ポモドーロタイマー</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <h1>ポモドーロタイマー</h1>
+
+  <h2>時報</h2>
+  <label class="switch">
+    <input type="checkbox" id="toggleChime" />
+    <span class="slider"></span>
+    <span class="label-text"> </span>
+  </label>
+
+  <div>
+    <h2>ポモドーロ設定</h2>
+    集中時間 (分): <input type="number" id="focusTime" min="1" max="120" value="25" />
+    休憩時間 (分): <input type="number" id="breakTime" min="1" max="60" value="5" />
+    <button id="startPomodoro">開始</button>
+    <button id="stopPomodoro">停止</button>
+    <p id="pomodoroStatus"></p>
+  </div>
+
+  <div>
+    <h2>BGM</h2>
+    <button data-bgm="focus" class="playBGM">集中BGM</button>
+    <button data-bgm="break" class="playBGM">休憩BGM</button>
+    <button id="stopBGM">停止</button>
+    <br />
+    ボリューム: <input type="range" id="bgmVolume" min="0" max="1" step="0.01" />
+  </div>
+
+  <div>
+    <h2>環境音</h2>
+    <button data-ambient="birds" class="playAmbient">鳥</button>
+    <button data-ambient="fire" class="playAmbient">焚き火</button>
+    <button id="stopAmbient">停止</button>
+    <br />
+    ボリューム: <input type="range" id="ambientVolume" min="0" max="1" step="0.01" />
+  </div>
+
+  <div>
+    <h2>鐘の音のボリューム</h2>
+    <input type="range" id="chimeVolume" min="0" max="1" step="0.01" />
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
