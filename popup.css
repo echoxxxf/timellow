@@ -122,6 +122,28 @@ input:checked + .slider:before {
   margin-left: 16px;
 }
 
+/* 全停止ボタン */
+#StopContainer {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1000;
+}
+
+#stopAll {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#stopAll:hover {
+  background-color: #c9302c;
+}
+
 /* ダークモード対応 */
 @media (prefers-color-scheme: dark) {
   body {
