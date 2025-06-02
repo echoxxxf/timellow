@@ -6,23 +6,31 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   switch (action) {
     case 'playLoop':
       stop(id);
-      const loopAudio = new Audio(src);
-      loopAudio.loop = true;
-      loopAudio.volume = volume;
-      loopAudio.play();
-      audioMap[id] = loopAudio;
+      try {
+        const loopAudio = new Audio(src);
+        loopAudio.loop = true;
+        loopAudio.volume = volume;
+        loopAudio.play().catch(console.error);
+        audioMap[id] = loopAudio;
+      } catch (e) {
+        console.error(`Error playing loop for ${id}:`, e);
+      }
       break;
 
     case 'playOnce':
-      const onceAudio = new Audio(src);
-      onceAudio.volume = volume;
-      onceAudio.play();
+      try {
+        const onceAudio = new Audio(src);
+        onceAudio.volume = volume;
+        onceAudio.play().catch(console.error);
+      } catch (e) {
+        console.error(`Error playing once for ${id}:`, e);
+      }
       break;
 
     case 'stop':
       stop(id);
       break;
-      
+
     case 'setVolume':
       if (audioMap[id]) {
         audioMap[id].volume = volume;

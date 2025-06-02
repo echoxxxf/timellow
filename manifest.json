@@ -4,7 +4,11 @@
   "description": "A Chrome extension that plays hourly chimes, background and ambient sounds, and includes a Pomodoro timer.",
   "version": "1.0",
   "default_locale": "ja",
-  "permissions": ["storage", "alarms", "offscreen"],
+  "permissions": [
+    "storage",
+    "alarms",
+    "offscreen"
+  ],
   "background": {
     "service_worker": "background.js"
   },
@@ -25,8 +29,18 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["sounds/*.mp3"],
+      "resources": ["sounds/**"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "offscreen_documents": [
+    {
+      "url": "offscreen.html",
+      "reasons": ["AUDIO_PLAYBACK"],
+      "justification": "ポモドーロや環境音、鐘の音の再生に必要なため"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
 }
