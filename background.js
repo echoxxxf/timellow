@@ -48,6 +48,7 @@ function startBGM(mode) {
 function scheduleNextHourlyChime() {
   const now = new Date();
   const nextHour = new Date(now);
+  //nextHour.setMinutes(now.getMinutes() + 1, 0, 0);  // 毎分0秒※テスト用
   nextHour.setHours(now.getHours() + 1, 0, 0, 0);  // 次の時間の0分0秒0ミリ秒にセット
   const delay = nextHour.getTime() - now.getTime();
 
@@ -132,7 +133,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case 'stopAllSounds':
       stopAudio('bgm');
       stopAudio('ambient');
-      stopPomodoro();
+      if (isPomodoroRunning) {
+        clearInterval(timer);
+        isPomodoroRunning = false;
+        chrome.runtime.sendMessage({ action: 'updatePomodoro', currentMode: null, remainingTime: 0 });
+      }
       break;
   }
   sendResponse();
