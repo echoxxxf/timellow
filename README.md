@@ -22,12 +22,13 @@ Timellow（タイメロウ）は、ポモドーロタイマー・時報・環境
 ## 🎵 音源の追加方法
 著作権の都合上、音源ファイルはこのリポジトリには含まれていません。
 ご自身でお好きな音源をご用意いただき、拡張機能フォルダ内の `sounds/` に保存してください。
-- focus.mp3：集中時BGM
-- break.mp3：休憩時BGM
-- chime.mp3：毎時の鐘
-- clock.mp3：ポモドーロタイマー切り替え音
-- birds.mp3：鳥の声
-- fire.mp3：焚き火の音
+- `focus.mp3`：集中時BGM
+- `break.mp3`：休憩時BGM
+- `chime.mp3`：毎時の鐘
+- `clock.mp3`：ポモドーロタイマー切り替え音
+- `birds.mp3`：鳥の声
+- `fire.mp3`：焚き火の音
+- `silence.mp3`：無音（Service Workerのスリープ回避用）
 
 なお、開発時に使用していたBGMは以下の通りです。
 - [focus.mp3（作業BGM）](https://pocket-se.info/archives/1649/)
@@ -77,6 +78,7 @@ The files should be named as follows:
 - `clock.mp3`: Pomodoro timer transition sound  
 - `birds.mp3`: Bird chirping ambience  
 - `fire.mp3`: Campfire ambience
+- `silence.mp3`：Silent audio used to keep the Service Worker awake
 
 For reference, here are the sounds used during development:
 - [focus.mp3 (Focus BGM)](https://pocket-se.info/archives/1649/)

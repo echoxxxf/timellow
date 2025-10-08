@@ -45,6 +45,23 @@ function startBGM(mode) {
   playAudioLoop('bgm', src, volumes.bgm);
 }
 
+function startSilentKeepAlive() {
+  ensureOffscreen().then(() => {
+    chrome.runtime.sendMessage({
+      action: 'playLoop',
+      id: 'silent',
+      src: 'sounds/silence.mp3',
+      volume: 0.001
+    });
+    console.log('[KeepAlive] Silent loop started');
+  });
+}
+
+function stopSilentKeepAlive() {
+  chrome.runtime.sendMessage({ action: 'stop', id: 'silent' });
+  console.log('[KeepAlive] Silent loop stopped');
+}
+
 function scheduleNextHourlyChime() {
   const now = new Date();
   const nextHour = new Date(now);
@@ -66,6 +83,11 @@ function stopPomodoro() {
   }
   stopAudio('bgm');
   chrome.runtime.sendMessage({ action: 'updatePomodoro', currentMode: null, remainingTime: 0 });
+  
+  // 時報がオンの場合は無音ループを再開する
+  if (isHourlyChimeOn) {
+    startSilentKeepAlive();
+  }
 }
 
 function startPomodoro(focusMinutes, breakMinutes) {
@@ -100,7 +122,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       isHourlyChimeOn = message.enabled;
       chrome.storage.local.set({ isHourlyChimeOn });
       chrome.alarms.clear('hourlyChime');
-      if (isHourlyChimeOn) scheduleNextHourlyChime();
+      if (isHourlyChimeOn) {
+        startSilentKeepAlive();
+        scheduleNextHourlyChime();
+      } else {
+        stopSilentKeepAlive();
+      }
       break;
 
     case 'setVolume':
