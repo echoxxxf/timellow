@@ -14,6 +14,8 @@ let volumes = {
   chime: 0.5
 };
 
+let keepAliveTimer = null;
+
 async function ensureOffscreen() {
   const existing = await chrome.offscreen.hasDocument();
   if (!existing) {
@@ -46,20 +48,21 @@ function startBGM(mode) {
 }
 
 function startSilentKeepAlive() {
-  ensureOffscreen().then(() => {
-    chrome.runtime.sendMessage({
-      action: 'playLoop',
-      id: 'silent',
-      src: 'sounds/silence.mp3',
-      volume: 0.001
-    });
-    console.log('[KeepAlive] Silent loop started');
-  });
+  if (keepAliveTimer) return;
+  keepAliveTimer = setInterval(() => {
+    // Chromeが「まだ動いている」と認識できるよう軽い処理を実行
+    chrome.runtime.getPlatformInfo(() => {});
+    // console.log('[KeepAlive] tick'); // デバッグ用
+  }, 15000); // 15秒ごとに実行（Chromeのアイドル検知を防ぐ）
+  console.log('[KeepAlive] Loop started');
 }
 
 function stopSilentKeepAlive() {
-  chrome.runtime.sendMessage({ action: 'stop', id: 'silent' });
-  console.log('[KeepAlive] Silent loop stopped');
+  if (keepAliveTimer) {
+    clearInterval(keepAliveTimer);
+    keepAliveTimer = null;
+    console.log('[KeepAlive] Loop stopped');
+  }
 }
 
 function scheduleNextHourlyChime() {
